@@ -16,12 +16,12 @@
   
   <repositories>
     <repository>
-	<releases>
-	</releases>
-	<snapshots>
-	</snapshots>
 	<id>bukkit-repo</id>
 	<url>http://repo.bukkit.org/content/repositories/releases/</url>
+    </repository>
+    <repository>
+	<id>sk89q-mvn2</id>
+	<url>http://mvn2.sk89q.com/repo</url>
     </repository>
   </repositories>
 
