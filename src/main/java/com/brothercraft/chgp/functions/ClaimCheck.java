@@ -41,26 +41,26 @@ public class ClaimCheck {
         }
         
         public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
-          Static.checkPlugin("GriefPrevention", tar);
-    		  Player player;
-	  		  CArray array;
+          Static.checkPlugin("GriefPrevention", t);
+                Player player;
+		CArray array;
 
           if (args.length == 0) {
-				    throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
-			    } else if (args.length == 1) {
-			    	if (args[0] instanceof CArray) {
-			        array = (CArray)args[0];
-			    		MCPlayer p = environment.getEnv(CommandHelperEnvironment.class).GetPlayer();
-				    	player = ((BukkitMCPlayer)p)._Player();
-				    } else {
-				    	throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
-				    }
-		    	} else if (args.length == 2 && (args[0] instanceof CString) && (args[1] instanceof CArray)) {
-			    	player = Bukkit.getPlayer(args[0].val());
-			    	array = (CArray)args[1];
-		    	} else {
-			    	throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
-		    	}
+          	throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
+          } else if (args.length == 1) {
+          	if (args[0] instanceof CArray) {
+          		array = (CArray)args[0];
+          		MCPlayer p = environment.getEnv(CommandHelperEnvironment.class).GetPlayer();
+          		player = ((BukkitMCPlayer)p)._Player();
+          	} else {
+          		throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
+          	}
+          } else if (args.length == 2 && (args[0] instanceof CString) && (args[1] instanceof CArray)) {
+          	player = Bukkit.getPlayer(args[0].val());
+          	array = (CArray)args[1];
+          } else {
+          	throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
+          }
 
 
           MCLocation loc = ObjectGenerator.GetGenerator().location(array, null, t);
