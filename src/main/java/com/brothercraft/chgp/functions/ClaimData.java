@@ -107,7 +107,7 @@ public class ClaimData {
 	}
 
 	public String docs() {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    return "int {location} gets the id of a claim at given location";
 	}
 
 	public CHVersion since() {
@@ -215,7 +215,7 @@ public class ClaimData {
 	}
 
 	public String docs() {
-	    throw new UnsupportedOperationException("Not supported yet.");
+	    return "array {location | id} gets various data about a claim";
 	}
 
 	public CHVersion since() {
