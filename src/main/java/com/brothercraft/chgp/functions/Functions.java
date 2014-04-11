@@ -1,9 +1,8 @@
 package com.brothercraft.chgp.functions;
 
-import com.brothercraft.chgp.util.Converters;
+import com.brothercraft.chgp.util.Util;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.annotations.api;
-import com.laytonsmith.annotations.startup;
 import com.laytonsmith.core.CHVersion;
 import com.laytonsmith.core.ObjectGenerator;
 import com.laytonsmith.core.Static;
@@ -22,44 +21,7 @@ import java.util.ArrayList;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
-public class ClaimData {
-    
-    private static CArray formPermissions(ArrayList<String> builders, ArrayList<String> containers, ArrayList<String> accesors, ArrayList<String> managers, Target tar) {
-		CArray permissions = new CArray(tar);
-		CArray Cbuilders = new CArray(tar), Ccontainers = new CArray(tar), Caccesors = new CArray(tar), Cmanagers = new CArray(tar);
-		
-		for (int i = 0; i < builders.size(); i++)
-		    Cbuilders.push(new CString(builders.get(i), tar));
-		
-		permissions.set("builders", Cbuilders, tar);
-		
-		for (int i = 0; i < containers.size(); i++)
-		    Ccontainers.push(new CString(containers.get(i), tar));
-		
-		permissions.set("containers", Ccontainers, tar);
-		
-		for (int i = 0; i < accesors.size(); i++)
-		    Caccesors.push(new CString(accesors.get(i), tar));		
-		
-		permissions.set("accesors", Caccesors, tar);
-		
-		for (int i = 0; i < managers.size(); i++)
-		    Cmanagers.push(new CString(managers.get(i), tar));
-		
-		permissions.set("managers", Cmanagers, tar);
-		
-		return(permissions);
-    }
-    
-    @startup
-    public static void onEnable(){
-	try {
-	    Static.checkPlugin("GriefPrevention", Target.UNKNOWN);
-	} catch (Exception e) {
-	    System.out.println("[CommandHelper] CHGP Could not find GriefPrevention please make sure you have it installed.");
-	}
-	    System.out.println("[CommandHelper] CHGP Initialized - ACzChef");
-    }
+public class Functions {
     
     @api
     public static class get_claim_id extends AbstractFunction {
@@ -83,7 +45,7 @@ public class ClaimData {
 	    
 	    if (args[0] instanceof CArray) {
 		l = ObjectGenerator.GetGenerator().location(args[0], (l != null ? l.getWorld() : null), tar);
-		c = GriefPrevention.instance.dataStore.getClaimAt(Converters.convertLocation(l), true, null);
+		c = GriefPrevention.instance.dataStore.getClaimAt(Util.Location(l), true, null);
 	    } else {
 		 throw new ConfigRuntimeException("Expected argument 1 of get_claim_id to be an array",
 		 ExceptionType.CastException, tar);
@@ -137,7 +99,7 @@ public class ClaimData {
 	    
 	    if (args[0] instanceof CArray) {
 		l = ObjectGenerator.GetGenerator().location(args[0], (l != null ? l.getWorld() : null), tar);
-		c = GriefPrevention.instance.dataStore.getClaimAt(Converters.convertLocation(l), true, null);
+		c = GriefPrevention.instance.dataStore.getClaimAt(Util.Location(l), true, null);
 	    } else if(args[0] instanceof CInt) {
 		long id = Static.getInt(args[0], tar);
 		c = GriefPrevention.instance.dataStore.getClaim(id);
@@ -153,8 +115,8 @@ public class ClaimData {
 	    CArray data = new CArray(tar);
 	    CArray corners = new CArray(tar);
 	    
-	    MCLocation corner1 = Converters.convertLocation(c.getLesserBoundaryCorner());
-	    MCLocation corner2 = Converters.convertLocation(c.getGreaterBoundaryCorner());
+	    MCLocation corner1 = Util.Location(c.getLesserBoundaryCorner());
+	    MCLocation corner2 = Util.Location(c.getGreaterBoundaryCorner());
 	    
 	    CArray Ccorner1 = ObjectGenerator.GetGenerator().location(corner1);
 	    CArray Ccorner2 = ObjectGenerator.GetGenerator().location(corner2);
@@ -182,7 +144,7 @@ public class ClaimData {
 		ArrayList<String> builders = new ArrayList<String>(), containers = new ArrayList<String>(), accesors = new ArrayList<String>(), managers = new ArrayList<String>();
 		data.set("parentId", new CInt(c.parent.getID().intValue(), tar), tar);
 		c.getPermissions(builders, containers, accesors, managers);
-		CArray perms = formPermissions(builders, containers, accesors, managers, tar);
+		CArray perms = Util.formPermissions(builders, containers, accesors, managers, tar);
 		data.set("permissions", perms, tar);
 	    } else {
 		data.set("id", new CInt(c.getID().intValue(), tar), tar);
@@ -198,7 +160,7 @@ public class ClaimData {
 		ArrayList<String> builders = new ArrayList<String>(), containers = new ArrayList<String>(), accesors = new ArrayList<String>(), managers = new ArrayList<String>();
 		
 		c.getPermissions(builders, containers, accesors, managers);
-		CArray perms = formPermissions(builders, containers, accesors, managers, tar);
+		CArray perms = Util.formPermissions(builders, containers, accesors, managers, tar);
 		data.set("permissions", perms, tar);
 	    }
 	    
