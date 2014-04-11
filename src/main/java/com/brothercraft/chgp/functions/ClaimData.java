@@ -90,7 +90,7 @@ public class ClaimData {
 	    }
 	    
 	    if(c == null) {
-		return new CNull();
+		return CNull.NULL;
 	    } else if (c.getID() == null){
 		return new CInt(c.parent.getID().intValue(), tar);
 	    } else {
@@ -147,7 +147,7 @@ public class ClaimData {
 	    }
 	    
 	    if(c == null) {
-		return new CNull();
+		return CNull.NULL;
 	    } 
 	    
 	    CArray data = new CArray(tar);
