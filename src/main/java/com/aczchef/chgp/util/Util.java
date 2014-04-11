@@ -1,4 +1,4 @@
-package com.brothercraft.chgp.util;
+package com.aczchef.chgp.util;
 
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.bukkit.BukkitMCLocation;

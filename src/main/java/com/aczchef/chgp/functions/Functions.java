@@ -1,6 +1,6 @@
-package com.brothercraft.chgp.functions;
+package com.aczchef.chgp.functions;
 
-import com.brothercraft.chgp.util.Util;
+import com.aczchef.chgp.util.Util;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.abstraction.bukkit.BukkitMCLocation;

@@ -1,4 +1,4 @@
-package com.brothercraft.chgp;
+package com.aczchef.chgp;
 
 import com.laytonsmith.PureUtilities.SimpleVersion;
 import com.laytonsmith.PureUtilities.Version;
