@@ -4,7 +4,7 @@ import com.aczchef.chgp.util.Util;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.abstraction.bukkit.BukkitMCLocation;
-import com.laytonsmith.abstraction.bukkit.BukkitMCPlayer;
+import com.laytonsmith.abstraction.bukkit.entities.BukkitMCPlayer;
 import com.laytonsmith.annotations.api;
 import com.laytonsmith.core.CHVersion;
 import com.laytonsmith.core.ObjectGenerator;
@@ -18,10 +18,12 @@ import com.laytonsmith.core.constructs.Construct;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.CommandHelperEnvironment;
 import com.laytonsmith.core.environments.Environment;
+import com.laytonsmith.core.exceptions.CRE.CRECastException;
+import com.laytonsmith.core.exceptions.CRE.CREFormatException;
+import com.laytonsmith.core.exceptions.CRE.CREInvalidPluginException;
+import com.laytonsmith.core.exceptions.CRE.CREThrowable;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import com.laytonsmith.core.functions.AbstractFunction;
-import com.laytonsmith.core.functions.Exceptions;
-import com.laytonsmith.core.functions.Exceptions.ExceptionType;
 import java.util.ArrayList;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -35,8 +37,8 @@ public class Functions {
     @api
     public static class get_claim_id extends AbstractFunction {
 
-	public ExceptionType[] thrown() {
-	    return new ExceptionType[]{ExceptionType.InvalidPluginException, ExceptionType.CastException};
+	public Class<? extends CREThrowable>[] thrown() {
+	    return new Class[] { CREInvalidPluginException.class, CRECastException.class };
 	}
 
 	public boolean isRestricted() {
@@ -56,8 +58,7 @@ public class Functions {
 		l = ObjectGenerator.GetGenerator().location(args[0], (l != null ? l.getWorld() : null), tar);
 		c = GriefPrevention.instance.dataStore.getClaimAt(Util.Location(l), true, null);
 	    } else {
-		throw new ConfigRuntimeException("Expected argument 1 of get_claim_id to be an array",
-			ExceptionType.CastException, tar);
+		throw new CRECastException("Expected argument 1 of get_claim_id to be an array", tar);
 	    }
 
 	    if (c == null) {
@@ -89,8 +90,8 @@ public class Functions {
     @api
     public static class get_claim_info extends AbstractFunction {
 
-	public ExceptionType[] thrown() {
-	    return new ExceptionType[]{ExceptionType.InvalidPluginException, ExceptionType.CastException};
+	public Class<? extends CREThrowable>[] thrown() {
+	    return new Class[]{ CREInvalidPluginException.class, CRECastException.class };
 	}
 
 	public boolean isRestricted() {
@@ -110,8 +111,7 @@ public class Functions {
 		l = ObjectGenerator.GetGenerator().location(args[0], (l != null ? l.getWorld() : null), tar);
 		c = GriefPrevention.instance.dataStore.getClaimAt(Util.Location(l), true, null);
 	    } else {
-		throw new ConfigRuntimeException("Expected argument 1 of get_claim_info to be a location array.",
-			ExceptionType.CastException, tar);
+		throw new CRECastException("Expected argument 1 of get_claim_info to be a location array.", tar);
 	    }
 
 	    if (c == null) {
@@ -140,8 +140,8 @@ public class Functions {
 	    Ccorner2.remove(new CString("pitch", tar));
 	    Ccorner2.remove(new CString("yaw", tar));
 
-	    corners.push(Ccorner1);
-	    corners.push(Ccorner2);
+	    corners.push(Ccorner1, tar);
+	    corners.push(Ccorner2, tar);
 
 	    data.set("corners", corners, tar);
 	    data.set("owner", new CString(c.getOwnerName(), tar), tar);
@@ -161,7 +161,7 @@ public class Functions {
 		    CArray childData = new CArray(tar);
 
 		    childData.set("Owner", new CString(c.children.get(i).getOwnerName(), tar), tar);
-		    children.push(childData);
+		    children.push(childData, tar);
 		}
 		data.set("subclaims", children, tar);
 
@@ -196,7 +196,7 @@ public class Functions {
     @api(environments = {CommandHelperEnvironment.class})
     public static class has_gp_buildperm extends AbstractFunction {
 
-	public Exceptions.ExceptionType[] thrown() {
+	public Class<? extends CREThrowable>[] thrown() {
 	    return null;
 	}
 
@@ -214,20 +214,20 @@ public class Functions {
 	    CArray array;
 
 	    if (args.length == 0) {
-		throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
+		throw new CREFormatException("Invalid arguments. Use [player,] location", t);
 	    } else if (args.length == 1) {
 		if (args[0] instanceof CArray) {
 		    array = (CArray) args[0];
 		    MCPlayer p = environment.getEnv(CommandHelperEnvironment.class).GetPlayer();
 		    player = ((BukkitMCPlayer) p)._Player();
 		} else {
-		    throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
+		    throw new CREFormatException("Invalid arguments. Use [player,] location", t);
 		}
 	    } else if (args.length == 2 && (args[0] instanceof CString) && (args[1] instanceof CArray)) {
 		player = Bukkit.getPlayer(args[0].val());
 		array = (CArray) args[1];
 	    } else {
-		throw new ConfigRuntimeException("Invalid arguments. Use [player,] location", Exceptions.ExceptionType.FormatException, t);
+		throw new CREFormatException("Invalid arguments. Use [player,] location", t);
 	    }
 
 	    MCLocation loc = ObjectGenerator.GetGenerator().location(array, null, t);
